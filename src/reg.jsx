@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 
 const REG = () => {
     const [fullName, setFullName] = useState('');
@@ -67,8 +68,24 @@ const REG = () => {
         }
 
         if (valid) {
-            setSuccessMessage('Registration successful!');
-            // Here you can add code to submit the form data to the server
+            // Send form data to backend using Axios
+            axios.post('/api/formData', {
+                fullName,
+                email,
+                age,
+                address,
+                phoneNumber
+            })
+            .then(response => {
+                setSuccessMessage(response.data.message);
+                // Reset form fields if needed
+                setFullName('');
+                setEmail('');
+                setAge('');
+                setAddress('');
+                setPhoneNumber('');
+            })
+            .catch(error => console.error('Error:', error));
         }
     };
 
